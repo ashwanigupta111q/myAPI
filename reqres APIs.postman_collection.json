@@ -1,0 +1,718 @@
+{
+  "info": {
+    "_postman_id": "5df29dc9-0921-4285-bd17-0750b3fe4b5f",
+    "name": "reqres APIs",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "47226707",
+    "_collection_link": "https://go.postman.co/collection/47226707-5df29dc9-0921-4285-bd17-0750b3fe4b5f?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "enviroments",
+      "item": []
+    },
+    {
+      "name": "https://reqres.in/api/users/1",
+      "protocolProfileBehavior": {
+        "disableBodyPruning": true
+      },
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "x-api-key",
+            "value": "{{api key}}",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{  \r\n    \"name\": \"iti\",\r\n    \"job\": \"trainer\",\r\n    \"id\": 20\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "https://reqres.in/api/users/1",
+          "protocol": "https",
+          "host": [
+            "reqres",
+            "in"
+          ],
+          "path": [
+            "api",
+            "users",
+            "1"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "https://reqres.in/api/users",
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "exec": [
+              "pm.test(\"Request URL is correct and matches the expected endpoint\", function () {",
+              "    pm.expect(pm.request.url.toString()).to.equal(\"https://reqres.in/api/users\");",
+              "});",
+              "",
+              "pm.test(\"Request parameters are correctly set\", function () {",
+              "    pm.expect(pm.request.url.toString()).to.equal(\"https://reqres.in/api/users\");",
+              "    pm.expect(pm.request.method).to.equal(\"GET\");",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        },
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Response status code is 200\", function () {\r",
+              "    pm.expect(pm.response.code).to.eql(200);\r",
+              "});\r",
+              "\r",
+              "\r",
+              "pm.test(\"Validate the presence of required fields in the response\", function () {\r",
+              "    const responseData = pm.response.json();\r",
+              "    \r",
+              "    pm.expect(responseData).to.be.an('object');\r",
+              "    pm.expect(responseData).to.have.all.keys('page', 'per_page', 'total', 'total_pages', 'data', 'support', '_meta');\r",
+              "    \r",
+              "    pm.expect(responseData.data).to.be.an('array');\r",
+              "    pm.expect(responseData.support).to.be.an('object');\r",
+              "    pm.expect(responseData._meta).to.be.an('object');\r",
+              "});\r",
+              "\r",
+              "\r",
+              "pm.test(\"Data array contains objects with required fields\", function () {\r",
+              "    const responseData = pm.response.json();\r",
+              "\r",
+              "    pm.expect(responseData).to.have.property('data').that.is.an('array').that.is.not.empty;\r",
+              "\r",
+              "    responseData.data.forEach(function(user) {\r",
+              "        pm.expect(user).to.have.all.keys('id', 'email', 'first_name', 'last_name', 'avatar');\r",
+              "    });\r",
+              "});\r",
+              "\r",
+              "\r",
+              "pm.test(\"Response time is less than 200ms\", function () {\r",
+              "    pm.expect(pm.response.responseTime).to.be.below(200);\r",
+              "});\r",
+              "\r",
+              "\r",
+              "pm.test(\"Support object contains url and text fields\", function () {\r",
+              "    const responseData = pm.response.json();\r",
+              "    \r",
+              "    pm.expect(responseData.support).to.exist;\r",
+              "    pm.expect(responseData.support).to.have.all.keys('url', 'text');\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Response has correct Content-Type header\", function () {\r",
+              "    pm.expect(pm.response.headers.get('Content-Type')).to.eql('application/json; charset=utf-8');\r",
+              "});\r",
+              "\r",
+              "\r",
+              "pm.test(\"Request URL is correct and matches the expected endpoint\", function () {\r",
+              "    pm.expect(pm.request.url.toString()).to.equal(\"https://reqres.in/api/users\");\r",
+              "});\r",
+              "\r",
+              "\r",
+              "pm.test(\"Response contains a non-empty support object\", function () {\r",
+              "    const responseData = pm.response.json();\r",
+              "    \r",
+              "    pm.expect(responseData).to.have.property('support').that.is.an('object').that.is.not.empty;\r",
+              "});\r",
+              "\r",
+              "\r",
+              "pm.test(\"Response total is a non-negative integer\", function () {\r",
+              "    const responseData = pm.response.json();\r",
+              "    \r",
+              "    pm.expect(responseData).to.be.an('object');\r",
+              "    pm.expect(responseData.total).to.exist.and.to.be.a('number').and.to.be.at.least(0);\r",
+              "});\r",
+              "\r",
+              "\r",
+              "pm.test(\"Each user's email is in a valid email format\", function () {\r",
+              "    const responseData = pm.response.json();\r",
+              "    \r",
+              "    pm.expect(responseData).to.have.property('data').that.is.an('array');\r",
+              "    \r",
+              "    responseData.data.forEach(user => {\r",
+              "        pm.expect(user).to.have.property('email').that.is.a('string').that.matches(/^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$/, \"Email format is invalid\");\r",
+              "    });\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Request parameters are correctly set\", function () {\r",
+              "    pm.expect(pm.request.url.toString()).to.equal(\"https://reqres.in/api/users\");\r",
+              "    pm.expect(pm.request.method).to.equal(\"GET\");\r",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "protocolProfileBehavior": {
+        "disableBodyPruning": true
+      },
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "x-api-key",
+            "value": "{{api key}}",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{  \r\n    \"name\": \"iti\",\r\n    \"job\": \"trainer\",\r\n    \"id\": 20\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "https://reqres.in/api/users",
+          "protocol": "https",
+          "host": [
+            "reqres",
+            "in"
+          ],
+          "path": [
+            "api",
+            "users"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "https://reqres.in/api/users",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "x-api-key",
+            "value": "{{api key}}",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{  \r\n    \"name\": \"iti\",\r\n    \"job\": \"trainer\",\r\n    \"id\": 20\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "https://reqres.in/api/users",
+          "protocol": "https",
+          "host": [
+            "reqres",
+            "in"
+          ],
+          "path": [
+            "api",
+            "users"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "https://reqres.in/api/users",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "x-api-key",
+            "value": "{{api_key}}",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{  \r\n    \"name\": \"iti\",\r\n    \"job\": \"trainer\",\r\n    \"id\": 20\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "https://reqres.in/api/users",
+          "protocol": "https",
+          "host": [
+            "reqres",
+            "in"
+          ],
+          "path": [
+            "api",
+            "users"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "https://reqres.in/api/users?page=2",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "x-api-key",
+            "value": "{{api key}}",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "https://reqres.in/api/users?page=2",
+          "protocol": "https",
+          "host": [
+            "reqres",
+            "in"
+          ],
+          "path": [
+            "api",
+            "users"
+          ],
+          "query": [
+            {
+              "key": "page",
+              "value": "2"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "https://reqres.in/api/users",
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "exec": [
+              "pm.test(\"Request URL is correct and matches the expected endpoint\", function () {",
+              "    pm.expect(pm.request.url.toString()).to.equal(\"https://reqres.in/api/users\");",
+              "});",
+              "",
+              "pm.test(\"Request parameters are correctly set\", function () {",
+              "    pm.expect(pm.request.url.toString()).to.equal(\"https://reqres.in/api/users\");",
+              "    pm.expect(pm.request.method).to.equal(\"GET\");",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        },
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Response status code is 200\", function () {\r",
+              "    pm.expect(pm.response.code).to.eql(200);\r",
+              "});\r",
+              "\r",
+              "\r",
+              "pm.test(\"Validate the presence of required fields in the response\", function () {\r",
+              "    const responseData = pm.response.json();\r",
+              "    \r",
+              "    pm.expect(responseData).to.be.an('object');\r",
+              "    pm.expect(responseData).to.have.all.keys('page', 'per_page', 'total', 'total_pages', 'data', 'support', '_meta');\r",
+              "    \r",
+              "    pm.expect(responseData.data).to.be.an('array');\r",
+              "    pm.expect(responseData.support).to.be.an('object');\r",
+              "    pm.expect(responseData._meta).to.be.an('object');\r",
+              "});\r",
+              "\r",
+              "\r",
+              "pm.test(\"Data array contains objects with required fields\", function () {\r",
+              "    const responseData = pm.response.json();\r",
+              "\r",
+              "    pm.expect(responseData).to.have.property('data').that.is.an('array').that.is.not.empty;\r",
+              "\r",
+              "    responseData.data.forEach(function(user) {\r",
+              "        pm.expect(user).to.have.all.keys('id', 'email', 'first_name', 'last_name', 'avatar');\r",
+              "    });\r",
+              "});\r",
+              "\r",
+              "\r",
+              "pm.test(\"Response time is less than 200ms\", function () {\r",
+              "    pm.expect(pm.response.responseTime).to.be.below(200);\r",
+              "});\r",
+              "\r",
+              "\r",
+              "pm.test(\"Support object contains url and text fields\", function () {\r",
+              "    const responseData = pm.response.json();\r",
+              "    \r",
+              "    pm.expect(responseData.support).to.exist;\r",
+              "    pm.expect(responseData.support).to.have.all.keys('url', 'text');\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Response has correct Content-Type header\", function () {\r",
+              "    pm.expect(pm.response.headers.get('Content-Type')).to.eql('application/json; charset=utf-8');\r",
+              "});\r",
+              "\r",
+              "\r",
+              "pm.test(\"Request URL is correct and matches the expected endpoint\", function () {\r",
+              "    pm.expect(pm.request.url.toString()).to.equal(\"https://reqres.in/api/users\");\r",
+              "});\r",
+              "\r",
+              "\r",
+              "pm.test(\"Response contains a non-empty support object\", function () {\r",
+              "    const responseData = pm.response.json();\r",
+              "    \r",
+              "    pm.expect(responseData).to.have.property('support').that.is.an('object').that.is.not.empty;\r",
+              "});\r",
+              "\r",
+              "\r",
+              "pm.test(\"Response total is a non-negative integer\", function () {\r",
+              "    const responseData = pm.response.json();\r",
+              "    \r",
+              "    pm.expect(responseData).to.be.an('object');\r",
+              "    pm.expect(responseData.total).to.exist.and.to.be.a('number').and.to.be.at.least(0);\r",
+              "});\r",
+              "\r",
+              "\r",
+              "pm.test(\"Each user's email is in a valid email format\", function () {\r",
+              "    const responseData = pm.response.json();\r",
+              "    \r",
+              "    pm.expect(responseData).to.have.property('data').that.is.an('array');\r",
+              "    \r",
+              "    responseData.data.forEach(user => {\r",
+              "        pm.expect(user).to.have.property('email').that.is.a('string').that.matches(/^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$/, \"Email format is invalid\");\r",
+              "    });\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Request parameters are correctly set\", function () {\r",
+              "    pm.expect(pm.request.url.toString()).to.equal(\"https://reqres.in/api/users\");\r",
+              "    pm.expect(pm.request.method).to.equal(\"GET\");\r",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "protocolProfileBehavior": {
+        "disableBodyPruning": true
+      },
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "x-api-key",
+            "value": "{{api key}}",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{  \r\n    \"name\": \"iti\",\r\n    \"job\": \"trainer\",\r\n    \"id\": 20\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "https://reqres.in/api/users",
+          "protocol": "https",
+          "host": [
+            "reqres",
+            "in"
+          ],
+          "path": [
+            "api",
+            "users"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "https://reqres.in/api/users/1",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Response status code is 200\", function () {\r",
+              "    pm.expect(pm.response.code).to.equal(200);\r",
+              "});\r",
+              "\r",
+              "\r",
+              "pm.test(\"Response has required fields in the data object\", function () {\r",
+              "    const responseData = pm.response.json();\r",
+              "    \r",
+              "    pm.expect(responseData).to.be.an('object');\r",
+              "    pm.expect(responseData.data).to.exist;\r",
+              "    pm.expect(responseData.data).to.have.all.keys('id', 'email', 'first_name', 'last_name', 'avatar');\r",
+              "    \r",
+              "    // Check types of the fields\r",
+              "    pm.expect(responseData.data.id).to.be.a('number');\r",
+              "    pm.expect(responseData.data.email).to.be.a('string');\r",
+              "    pm.expect(responseData.data.first_name).to.be.a('string');\r",
+              "    pm.expect(responseData.data.last_name).to.be.a('string');\r",
+              "    pm.expect(responseData.data.avatar).to.be.a('string');\r",
+              "});\r",
+              "\r",
+              "\r",
+              "pm.test(\"Email is in a valid format\", function () {\r",
+              "    const responseData = pm.response.json();\r",
+              "\r",
+              "    pm.expect(responseData).to.be.an('object');\r",
+              "    pm.expect(responseData.data).to.exist;\r",
+              "    pm.expect(responseData.data.email).to.exist.and.to.match(/^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/, \"Email format is invalid\");\r",
+              "});\r",
+              "\r",
+              "\r",
+              "pm.test(\"Response time is less than 200ms\", function () {\r",
+              "    pm.expect(pm.response.responseTime).to.be.below(200);\r",
+              "});\r",
+              "\r",
+              "\r",
+              "pm.test(\"Validate the structure of the support object and its fields\", function () {\r",
+              "    const responseData = pm.response.json();\r",
+              "    \r",
+              "    pm.expect(responseData).to.be.an('object');\r",
+              "    pm.expect(responseData.support).to.exist.and.to.be.an('object');\r",
+              "    pm.expect(responseData.support.url).to.exist.and.to.be.a('string');\r",
+              "    pm.expect(responseData.support.text).to.exist.and.to.be.a('string');\r",
+              "});\r",
+              "var responseData = pm.response.json();\r",
+              "\r",
+              "// Test to check that the length of the response data is greater than 0\r",
+              "pm.test(\"Response data length is greater than zero\", function () {\r",
+              "    pm.expect(responseData).to.be.an('object');\r",
+              "    pm.expect(responseData.data).to.exist;\r",
+              "    pm.expect(Object.keys(responseData.data)).to.have.lengthOf.above(0, \"Response data should not be empty\");\r",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "protocolProfileBehavior": {
+        "disableBodyPruning": true
+      },
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "x-api-key",
+            "value": "{{api key}}",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{  \r\n    \"name\": \"pavan\",\r\n    \"job\": \"trainer\",\r\n    \"email\": \"gg.bluth@reqres.in\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "https://reqres.in/api/users/1",
+          "protocol": "https",
+          "host": [
+            "reqres",
+            "in"
+          ],
+          "path": [
+            "api",
+            "users",
+            "1"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "https://reqres.in/api/users",
+      "protocolProfileBehavior": {
+        "disableBodyPruning": true
+      },
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "x-api-key",
+            "value": "{{api key}}",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{  \r\n    \"name\": \"iti\",\r\n    \"job\": \"trainer\",\r\n    \"id\": 20\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "https://reqres.in/api/users/1",
+          "protocol": "https",
+          "host": [
+            "reqres",
+            "in"
+          ],
+          "path": [
+            "api",
+            "users",
+            "1"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "https://reqres.in/api/users?page=2",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "x-api-key",
+            "value": "{{api key}}",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "https://reqres.in/api/users?page=2",
+          "protocol": "https",
+          "host": [
+            "reqres",
+            "in"
+          ],
+          "path": [
+            "api",
+            "users"
+          ],
+          "query": [
+            {
+              "key": "page",
+              "value": "2"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "https://reqres.in/api/users/411",
+      "protocolProfileBehavior": {
+        "disableBodyPruning": true
+      },
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "x-api-key",
+            "value": "{{api key}}",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{  \r\n    \"name\": \"pavan\",\r\n    \"job\": \"trainer\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "https://reqres.in/api/users/411",
+          "protocol": "https",
+          "host": [
+            "reqres",
+            "in"
+          ],
+          "path": [
+            "api",
+            "users",
+            "411"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "https://simple-books-api.glitch.me/status",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Status code is 200\", function () {\r",
+              "    pm.response.to.have.status(200);\r",
+              "        });\r",
+              "        pm.test(\"Status is OK\", function () {\r",
+              "            pm.expect(pm.response.json().status).to.eql(\"OK\");\r",
+              "            });\r",
+              "            pm.collectionVariables.set(\"status\", pm.response.json().status);\r",
+              "            pm.environment.set(\"status\", pm.response.json().status);\r",
+              "        "
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base url}}/status",
+          "host": [
+            "{{base url}}"
+          ],
+          "path": [
+            "status"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "New Request",
+      "request": {
+        "method": "GET",
+        "header": []
+      },
+      "response": []
+    }
+  ],
+  "variable": [
+    {
+      "key": "base url",
+      "value": ""
+    },
+    {
+      "key": "status",
+      "value": ""
+    }
+  ]
+}
